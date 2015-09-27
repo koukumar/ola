@@ -22,13 +22,13 @@ def check_booking_status(user):
 
 def fetch_dest_location(user):
     fb = firebase.FirebaseApplication('https://intense-fire-8730.firebaseio.com', None)
-    result = fb.get('/Account/' + user, None)
+    result = fb.get('/Account/' + user + '/location/', None)
     return result['lat'], result['long']
 
 
 def fetch_current_location(user):
     fb = firebase.FirebaseApplication('https://intense-fire-8730.firebaseio.com', None)
-    result = fb.get('/Account/' + user, None)
+    result = fb.get('/Account/' + user + '/location/', None)
     return result['cur_lat'], result['cur_long']
 
 
@@ -89,4 +89,5 @@ def start():
     check_and_book_cabs(user)
     Timer(5, start()).start()
 
-print book_cab(user)
+#print book_cab(user)
+start()
