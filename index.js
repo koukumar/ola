@@ -42,7 +42,10 @@ app.get('/trip', function(req, res) {
     }, function (errorObject) {
        console.log("The read failed: " + errorObject.code);
     });
-    res.send(data);
+    if (data != null) {
+      res.send(data);
+    } else {
+      res.send({ "status" : "No Trips Available"});
 });
 
 app.listen(port);
