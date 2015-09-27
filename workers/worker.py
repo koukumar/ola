@@ -79,7 +79,8 @@ def check_and_book_cabs(user):
     data = json.loads(check_cabs(user))
     ola_eta = data['categories'][0]['eta']
     cus_eta = get_arrival_time(user)
-    if ola_eta - 10 < cus_eta < ola_eta + 10:
+    print cus_eta, ola_eta
+    if ola_eta - 12 < cus_eta < ola_eta + 12:
         book_cab(user)
         print "Booked cab"
     return
