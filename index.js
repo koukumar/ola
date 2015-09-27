@@ -42,11 +42,13 @@ app.get('/trip', function(req, res) {
     }, function (errorObject) {
        console.log("The read failed: " + errorObject.code);
     });
-    if (data != null) {
-      res.send(data);
-    } else {
-      res.send({ "status" : "No Trips Available"});
+    if (data == null) {
+      data = ({ "status" : "No Trips Available"});
     }
+    resp = {"title": "Trip status",
+            "description": "Current trip booking status",
+            "data": data}
+    res.send([resp]);
 });
 
 app.listen(port);
