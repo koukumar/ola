@@ -21,8 +21,8 @@ app.post('/location', function(req, res) {
    lat = parseFloat(req.query.latitude);
    long = parseFloat(req.query.longitude);
    myFirebaseRef.update({
-	    lat: lat,
-	    long: long,
+	    cur_lat: lat,
+	    cur_long: long,
     });
    res.send('You are tracked!!!');
 });

@@ -1,7 +1,6 @@
 from firebase import firebase
 from socketIO_client import SocketIO, LoggingNamespace
 from threading import Timer
-import requests
 import googlemaps
 import json
 import time
@@ -76,7 +75,7 @@ def get_arrival_time(user):
                                   {"lat": lat2,
                                    "lng": lon2}}
     )
-    res = gmaps.directions({"lat": lat2, "lng":lon2}, {"lat": lat1, "lng":lon1}, mode="driving")
+    res = gmaps.directions({"lat": lat1, "lng": lon1}, {"lat": lat2, "lng": lon2}, mode="driving")
     return float(res[0]['legs'][-1]['duration']['value']/60.0)
 
 
@@ -122,21 +121,23 @@ def start():
 
 
 def test_script():
-    long = [77.5800795, 77.6026597, 77.6200672, 77.6240583, 77.6341273]
-    lat = [12.9484623, 12.9365709, 12.9288251, 12.9356402, 12.9389393]
+    #long = [77.5800795, 77.6026597, 77.6200672, 77.6240583, 77.6341273]
+    #lat = [12.9484623, 12.9365709, 12.9288251, 12.9356402, 12.9389393]
+    long = [77.5800795, 77.6341273]
+    lat = [12.9484623, 12.9389393]
+
     i = 0
     while(True):
         time.sleep(5)
-        dummy_data(long[i % 4], lat[i % 4])
+        dummy_data(long[i % 2], lat[i % 2])
         i = i + 1
         requests.post("https://pacific-thicket-7228.herokuapp.com/location?latitude=" +
-                      str(lat[i % 4]) + "&longitude=" + str(long[i % 4]))
+                      str(lat[i % 2]) + "&longitude=" + str(long[i % 2]))
 
 
 with SocketIO('http://logbase-socketio.herokuapp.com', 80, LoggingNamespace) as socketIO:
     print "Hello"
 #start()
 test_script()
-
 
 
