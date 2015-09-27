@@ -46,6 +46,7 @@ app.get('/trip', function(req, res) {
       res.send(data);
     } else {
       res.send({ "status" : "No Trips Available"});
+    }
 });
 
 app.listen(port);
