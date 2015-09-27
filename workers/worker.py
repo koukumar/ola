@@ -1,4 +1,5 @@
 from firebase import firebase
+from socketIO_client import SocketIO, LoggingNamespace
 from threading import Timer
 import requests
 import googlemaps
@@ -66,6 +67,10 @@ def get_arrival_time(user):
     lat1, lon1 = fetch_dest_location(user)
     lat2, lon2 = fetch_current_location(user)
     gmaps = googlemaps.Client('AIzaSyB-G0uNuZ0IV0_akfI7sAf6ThRr9OEyU7U')
+    socketIO.emit('queue-1', {"start_lat": lat1,
+                               "start_long": lon1,
+                               "end_lat": lat2,
+                               "end_long": lon2});
     res = gmaps.directions({"lat": lat2, "lng":lon2}, {"lat": lat1, "lng":lon1}, mode="driving")
     return float(res[0]['legs'][-1]['duration']['value']/60.0)
 
@@ -79,6 +84,8 @@ def check_and_book_cabs(user):
     data = json.loads(check_cabs(user))
     ola_eta = data['categories'][0]['eta']
     cus_eta = get_arrival_time(user)
+    socketIO.emit('queue-2', {"customer_eta": cus_eta,
+                          "ola_eta": ola_eta});
     print cus_eta, ola_eta
     if ola_eta - 12 < cus_eta < ola_eta + 12:
         book_cab(user)
@@ -88,7 +95,10 @@ def check_and_book_cabs(user):
 
 def start():
     check_and_book_cabs(user)
-    Timer(5, start()).start()
+    Timer(30, start()).start()
 
 #print book_cab(user)
-start()
+
+with SocketIO('http://logbase-socketio.herokuapp.com', 80, LoggingNamespace) as socketIO:
+    start()
+

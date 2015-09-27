@@ -1,11 +1,13 @@
 var express = require('express');
+var http = require('http').Server(app);
 
 var app = express();
 var bodyParser = require('body-parser');
 var Firebase = require("firebase");
 var myFirebaseRef = new Firebase("https://intense-fire-8730.firebaseio.com/Account/Kousik/location");
+var myFirebaseTripRef = new Firebase("https://intense-fire-8730.firebaseio.com/Account/Kousik/details");
 
-var port = process.env.PORT || process.env.STICK_API_PORT || 3000;
+var port = process.env.PORT || process.env.STICK_API_PORT || 2000;
 
 
 app.get('/', function (req, res) {
@@ -30,6 +32,17 @@ app.get('/login', function(req, res) {
    var params = req.params
    console.log(data, params, req.query);
    res.status(200).end();
+});
+
+app.get('/trip', function(req, res) {
+   data = { "status" : "No Trips Available"};
+   myFirebaseTripRef.on("value", function(snapshot) {
+      console.log(snapshot.val());
+      data = snapshot.val();
+    }, function (errorObject) {
+       console.log("The read failed: " + errorObject.code);
+    });
+    res.send(data);
 });
 
 app.listen(port);
