@@ -19,8 +19,8 @@ app.post('/location', function(req, res) {
    lat = parseFloat(req.query.latitude);
    long = parseFloat(req.query.longitude);
    myFirebaseRef.update({
-	    cur_lat1: lat,
-	    cur_long1: long,
+	    cur_lat: lat,
+	    cur_long: long,
     });
    res.status(200).end();
 });
