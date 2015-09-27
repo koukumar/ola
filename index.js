@@ -22,7 +22,7 @@ app.post('/location', function(req, res) {
 	    cur_lat: lat,
 	    cur_long: long,
     });
-   res.status(200).end('You are tracked!!!');
+   res.send('You are tracked!!!');
 });
 
 app.get('/login', function(req, res) {
